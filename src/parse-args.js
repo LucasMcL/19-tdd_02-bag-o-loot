@@ -16,31 +16,32 @@
 // Method should return error argument (may be null) and arguments from user optionally proccessed
 
 /**
- * processes user input and returns on object with error (may be null) and args
+ * processes user input and returns an error (may be null if no problems)
  * @param  {array} args - array of user input arguments
- * @return {object}     - object containing err and args
+ * @return {object || null}     - error object or null
  */
 const checkArgs = function(args) {
-	let [command, arg2, arg3] = args
-
 	let err = null
-	const validCommands = ['add', 'remove', 'ls', 'delivered']
-	if(!command) {
+	if(!args[0]) {
 		err = new Error('Please enter a command')
-		return {err, args}
+		return err
 	}
+
+	const validCommands = ['add', 'remove', 'ls', 'delivered']
+	const [command, arg2, arg3] = args
+
 	if(!validCommands.includes(command)) {
 		err = new Error('Not a valid command.  Please begin your request with "add", "remove", "ls", or "delivered"')
-		return {err, args}
+		return err
 	}
 	if(command === 'remove') {
 		if(!arg3) {
 			err = new Error('Please specify child and toy to remove.  Example: "remove michael baseball".')
 		}
+		return err
 	}
 
-
-	return {err, args}
+	return err
 }
 
 module.exports = {checkArgs}
