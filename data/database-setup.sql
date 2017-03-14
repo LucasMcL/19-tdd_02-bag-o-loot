@@ -1,0 +1,21 @@
+-- children
+CREATE TABLE `children` (
+	`childId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`childName`	TEXT NOT NULL UNIQUE,
+	`toysDelivered`	INTEGER NOT NULL DEFAULT 0 CHECK(toysDelivered = 0 OR toysDelivered = 1)
+);
+
+-- toys
+CREATE TABLE `toys` (
+	`toyId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`toyName`	TEXT NOT NULL UNIQUE
+);
+
+-- gifts
+CREATE TABLE `gifts` (
+	`giftId`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`childId`	INTEGER NOT NULL,
+	`toyId`	INTEGER NOT NULL,
+	FOREIGN KEY(`childId`) REFERENCES `children`(`childId`),
+	FOREIGN KEY(`toyId`) REFERENCES `toys`(`toyId`)
+);
