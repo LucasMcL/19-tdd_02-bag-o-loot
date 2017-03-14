@@ -13,3 +13,9 @@
 //  Check first word
 //  	- if not "add", "remove", "ls", or "delivered", that's an error
 //
+
+// Can a toy be added to a child before it exists in the toys table?
+// Can we create the toy, then add it to the child in one operation?
+
+// Method should return error argument (may be null) and arguments from user optionally proccessed
+
