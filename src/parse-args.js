@@ -19,3 +19,10 @@
 
 // Method should return error argument (may be null) and arguments from user optionally proccessed
 
+const parseArgs = function(args) {
+	let err = null
+
+	return {err, args}
+}
+
+module.exports = {parseArgs}
