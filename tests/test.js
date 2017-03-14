@@ -9,4 +9,14 @@ describe('parseArgs method', function() {
 	it('should be a function', function() {
 		assert.isFunction(parseArgs)
 	})
+
+	describe('return an error when', function() {
+		it('the first argument is not within the list of correct words', function() {
+			const {err} = parseArgs(['puppies', 'suzy', 'add'])
+			assert.isNotNull(err)
+		})
+		it('should ...', function() {
+
+		})
+	})
 })
