@@ -28,25 +28,41 @@ describe('checkArgs method', function() {
 })
 
 describe('db-calls', function() {
-	const {addChild, addToy, addGift, changeDelivered} = require('../src/db-calls.js')
-	describe('add toy', function() {
-		it('should add a toy to the toys table', function() {
-
+	const {addChild, addToy, addGift, changeDelivered, getChildId, getToyId, getChildrenWithGifts, getGiftsForChild} = require('../src/db-calls.js')
+	describe('should add ', function() {
+		it('a toy to the toys table', function() {
+			// Manually tested
+		})
+		it('a child to the children table', function() {
+			// Manually tested
+		})
+		it('a gift to the gift table', function() {
+			// Manually tested
+		})
+		it('delivered true to a child', function() {
+			// Manually tested
 		})
 	})
-	describe('add child', function() {
-		it('should add a child to the children table', function() {
-
+	describe('should get', function() {
+		it('a childs id from their name', function() {
+			return getChildId('suzy').then(id => {
+				assert.equal(id, '2')
+			})
 		})
-	})
-	describe('add gift', function() {
-		it('should add a gift table', function() {
-
+		it('a toys id from its name', function() {
+			return getToyId('Yo-yo').then(id => {
+				assert.equal(id, '1')
+			})
 		})
-	})
-	describe('change delivered', function() {
-		it('should change toy delivered for a specific child', function() {
-
+		it('a list of children who have gifts', function() {
+			return getChildrenWithGifts().then(children => {
+				assert.isDefined(children[0].childName)
+			})
+		})
+		it('a list of gifts for a child', function() {
+			return getGiftsForChild('suzy').then(gifts => {
+				assert.isDefined(gifts[0].toyName)
+			})
 		})
 	})
 })
