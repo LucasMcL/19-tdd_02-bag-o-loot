@@ -1,0 +1,23 @@
+{
+  "name": "19-tdd_02-bag-o-loot",
+  "version": "1.0.0",
+  "description": "This exercise plunges you right into TDD. You will start with an empty project. O lines of code. Nowhere to go but up. Each piece of your app's functionality will be created as responses to a test or tests that setup an expectation for a certain outcome. Every test will fail when first executed, because the logic to make them pass will not exist yet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests --recursive --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasMcL/19-tdd_02-bag-o-loot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucasMcL/19-tdd_02-bag-o-loot/issues"
+  },
+  "homepage": "https://github.com/LucasMcL/19-tdd_02-bag-o-loot#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
