@@ -36,7 +36,9 @@ const performCommand = function(args) {
 			}
 			break
 		case 'delivered':
-
+			onDeliveredCommand(arg2)
+				.then(() => console.log(`Toys marked as delivered for ${arg2}`))
+				.catch(err => console.error(`Error: ${err.message}`))
 			break
 	}
 }
@@ -130,7 +132,26 @@ const onLsCommandWithChild = function(arg2) {
 }
 
 const onDeliveredCommand = function(arg2) {
-	return null
+	return new Promise((resolve, reject) => {
+		if(!arg2) return reject(new Error(`Please specify a child whose records should be updated.  For example: delivered suzy.`))
+		const child = arg2
+
+		getChildId(child).then(id => {
+			if(!id) return reject(new Error(`Child ${child} not found.`))
+			else {
+				getGiftsForChild(child).then(gifts => {
+					if(gifts.length === 0) return reject(new Error(`No gifts found for child ${child}.`))
+					else {
+						changeDelivered(child)
+							.then(() => resolve())
+							.catch(err => reject(err))
+					}
+				}).catch(err => {reject(err)})
+			}
+		}).catch(err => {
+			reject(err)
+		})
+	})
 }
 
 

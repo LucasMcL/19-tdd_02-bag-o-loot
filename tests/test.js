@@ -126,12 +126,6 @@ describe('The on (whatever) functions: ', function() {
 			it(`that child did not have that gift`, function() {
 				return onRemoveCommand('brat', 'yo-yo')
 					.catch(err => assert.isNotNull(err))
-					.then(() => assert.equal(1, 2))
-			})
-		})
-		it('should return undefined when it is a good command', function() {
-			return onRemoveCommand('suzy', 'kite').then(response => {
-				assert.isUndefined(response)
 			})
 		})
 		it('should remove all instances of that gift for that child', function() {
@@ -163,18 +157,25 @@ describe('The on (whatever) functions: ', function() {
 	describe('onDeliveredCommand:', function() {
 		describe('return an error when:', function() {
 			it(`there is no argument after delivered`, function() {
-				return onDeliveredCommand(undefined).then(err => {
+				return onDeliveredCommand(undefined).catch(err => {
 					assert.isNotNull(err)
 				})
 			})
 			it(`the argument after delivered isn't a child`, function() {
-				return onDeliveredCommand('Purple').then(err => {
+				return onDeliveredCommand('Purple').catch(err => {
 					assert.isNotNull(err)
 				})
 			})
+			it(`the child had no gifts to mark as delivered`, function() {
+				return onDeliveredCommand('brat')
+					.then(() => assert.equal(1, 2))
+					.catch(err => {assert.isNotNull(err)})
+			})
 		})
-		it('should return null when it is a good command', function() {
-			// Check manuallys
+		it('should return undefined when it is a good command', function() {
+			return onDeliveredCommand('lucas').then(response => {
+				assert.isUndefined(response)
+			})
 		})
 	})
 })

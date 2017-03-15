@@ -111,6 +111,10 @@ const addGift = function(childName, toyName) {
 	})
 }
 
+////////////////////////////
+// Setters
+////////////////////////////
+
 const changeDelivered = function(childName) {
 	const {Database} = require('sqlite3')
 	const db = new Database('data/lootbag.sqlite')
