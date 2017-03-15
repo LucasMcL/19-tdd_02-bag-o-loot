@@ -33,6 +33,7 @@ const getToyId = function(toyName) {
 	})
 }
 
+// return array of objects [{childName: 'child'}]
 const getChildrenWithGifts = function() {
 	const {Database} = require('sqlite3')
 	const db = new Database('data/lootbag.sqlite')
@@ -47,12 +48,13 @@ const getChildrenWithGifts = function() {
 	})
 }
 
+// return array of objects [{toyName: 'toy'}]
 const getGiftsForChild = function(childName) {
 	const {Database} = require('sqlite3')
 	const db = new Database('data/lootbag.sqlite')
 
 	return new Promise((resolve, reject) => {
-		db.all(`select t.toyName
+		db.all(`select distinct t.toyName
 						from gifts as g, toys as t on g.toyId = t.toyId
 						join children as c on g.childId = c.childId
 						where c.childName = '${childName}';`, function(err, data) {

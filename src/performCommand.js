@@ -5,20 +5,39 @@
 const {addChild, addToy, addGift, changeDelivered, getChildId, getToyId, getChildrenWithGifts, getGiftsForChild, removeGift} = require('./db-calls.js')
 
 const performCommand = function(args) {
-	const command = args[0]
+	const [command, arg2, arg3] = args
 	switch(command) {
 		case 'add':
-
-			break;
+			onAddCommand(arg2, arg3)
+				.then(() => console.log(`${arg2} added for ${arg3}`))
+				.catch(err => console.error(`Error: ${err.message}`))
+			break
 		case 'remove':
-
-			break;
+			onRemoveCommand(arg2, arg3)
+				.then(() => console.log(`${arg3} removed from ${arg2}`))
+				.catch(err => console.error(`Error: ${err.message}`))
+			break
 		case 'ls':
-
-			break;
+			if(arg2) {
+				onLsCommandWithChild(arg2).then(gifts => {
+					if(gifts.length === 0) console.log(`no gifts found for ${arg2}`)
+					else gifts.forEach(gift => console.log(gift.toyName))
+				}).catch(err => {
+					console.error(`Error: ${err.message}`)
+				})
+			}
+			else {
+				onLsCommandNoChild().then(children => {
+					if(children.length === 0) console.log(`no children are receiving gifts :(`)
+					else children.forEach(child => console.log(child.childName))
+				}).catch(err => {
+					console.error(`Error: ${err.message}`)
+				})
+			}
+			break
 		case 'delivered':
 
-			break;
+			break
 	}
 }
 
@@ -31,9 +50,8 @@ const onAddCommand = (arg2, arg3) => {
 	// 	If not, make toy
 	// Add gift
 
-
 	return new Promise((resolve, reject) => {
-		if(!arg3) reject(new Error('Please enter both a child and toy.  Example: add suzy kite.'))
+		if(!arg3) return reject(new Error('Please enter both a child and toy.  Example: add suzy kite.'))
 		const toy = arg2, child = arg3
 
 		const p1 = new Promise((res, rej) => {
@@ -69,13 +87,46 @@ const onAddCommand = (arg2, arg3) => {
 }
 
 const onRemoveCommand = function(arg2, arg3) {
-	return null
+	// remove suzy kite
+	// Remove all instances of kites for suzy
+	// Return promise with error on reject or response on resolve
+
+	return new Promise((resolve, reject) => {
+		if(!arg3) return reject(new Error('Please enter both a toy and child.  Example: remove kite suzy.'))
+		const child = arg2, toy = arg3
+
+		getGiftsForChild(child).then(gifts => {
+			let childHasGift = false
+			gifts.forEach(gift => {if(gift.toyName === toy) childHasGift = true})
+			if(!childHasGift) return reject(new Error(`Gift ${toy} not found for child ${child}`))
+			else {
+				removeGift(child, toy)
+					.then(() => resolve())
+					.catch(err => reject(err))
+			}
+		})
+	})
 }
 
-const onLsCommand = function(arg2) {
+const onLsCommandNoChild = function() {
+	return new Promise((resolve, reject) => {
+		getChildrenWithGifts().then(data => {
+			resolve(data)
+		}).catch(err => {
+			reject(err)
+		})
+	})
+}
 
-	// return getChildrenWithGifts().then(data => {return data})
-	return null
+const onLsCommandWithChild = function(arg2) {
+	const child = arg2
+	return new Promise((resolve, reject) => {
+		getGiftsForChild(child).then(data => {
+			resolve(data)
+		}).catch(err => {
+			reject(err)
+		})
+	})
 }
 
 const onDeliveredCommand = function(arg2) {
@@ -84,4 +135,4 @@ const onDeliveredCommand = function(arg2) {
 
 
 
-module.exports = {performCommand, onAddCommand, onRemoveCommand, onLsCommand, onDeliveredCommand}
+module.exports = {performCommand, onAddCommand, onRemoveCommand, onLsCommandWithChild, onLsCommandNoChild, onDeliveredCommand}
