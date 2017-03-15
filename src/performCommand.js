@@ -29,9 +29,7 @@ const onAddCommand = (arg2, arg3) => {
 	// 	If not, make child
 	// Take toy arg and check if exists
 	// 	If not, make toy
-	// Check if toy-child pair already exists
-	// 	If it does, return an error
-	// 	Else, add it to gift
+	// Add gift
 
 
 	return new Promise((resolve, reject) => {
@@ -45,7 +43,7 @@ const onAddCommand = (arg2, arg3) => {
 						.then(() => res())
 						.catch(err => rej(err))
 				}
-				else res(id)
+				else res()
 			})
 		})
 
@@ -56,7 +54,7 @@ const onAddCommand = (arg2, arg3) => {
 						.then(() => res())
 						.catch(err => rej(err))
 				}
-				else res(id)
+				else res()
 			})
 		})
 
@@ -64,6 +62,8 @@ const onAddCommand = (arg2, arg3) => {
 			addGift(child, toy)
 				.then(() => resolve())
 				.catch(err => reject(err))
+		}).catch(err => {
+			reject(err)
 		})
 	})
 }
