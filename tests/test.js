@@ -53,9 +53,19 @@ describe('db-calls', function() {
 				assert.equal(id, '2')
 			})
 		})
+		it(`a response of 0 if a child's name isn't in the list`, function() {
+			return getChildId('Donald Trump').then(id => {
+				assert.equal(id, 0)
+			})
+		})
 		it('a toys id from its name', function() {
 			return getToyId('yo-yo').then(id => {
 				assert.equal(id, '1')
+			})
+		})
+		it(`a response of 0 if a toy's name isn't in the list`, function() {
+			return getToyId('Missile Launcher').then(id => {
+				assert.equal(id, 0)
 			})
 		})
 		it('a list of children who have gifts', function() {
@@ -80,14 +90,19 @@ describe('The on (whatever) functions: ', function() {
 	const {performCommand, onAddCommand, onRemoveCommand, onLsCommand, onDeliveredCommand} = require('../src/performCommand.js')
 	// add kite suzy
 	describe('onAddCommand:', function() {
+		it('should be a function', function() {
+			assert.isFunction(onAddCommand)
+		})
 		describe('return an error when:', function() {
 			it('only one argument (either child or toy) is specified', function() {
 				return onAddCommand('suzy').then(err => {
 					assert.isNotNull(err)
+				}).catch(err => {
+					assert.isNotNull(err)
 				})
 			})
 			it('a child already has one of that toy', function() {
-				return onAddCommand('john', 'yo-yo').then(err => {
+				return onAddCommand('john', 'yo-yo').catch(err => {
 					assert.isNotNull(err)
 				})
 			})

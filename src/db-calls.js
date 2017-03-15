@@ -14,7 +14,8 @@ const getChildId = function(childName) {
 	return new Promise((resolve, reject) => {
 		db.get(`select childId from children where childName = '${childName}';`, function(err, row) {
 			if(err) reject(err)
-			resolve(row.childId)
+			if(!row) resolve(0)
+			else resolve(row.childId)
 		})
 	})
 }
@@ -26,7 +27,8 @@ const getToyId = function(toyName) {
 	return new Promise((resolve, reject) => {
 		db.get(`select toyId from toys where toyName = '${toyName}';`, function(err, row) {
 			if(err) reject(err)
-			resolve(row.toyId)
+			if(!row) resolve(0)
+			else resolve(row.toyId)
 		})
 	})
 }
@@ -91,16 +93,19 @@ const addToy = function(toyName) {
 	})
 }
 
-const addGift = function(childId, toyId) {
+const addGift = function(childName, toyName) {
 	const {Database} = require('sqlite3')
 	const db = new Database('data/lootbag.sqlite')
 
 	return new Promise((resolve, reject) => {
-		db.run(`INSERT INTO gifts (giftId, childId, toyId)
-						VALUES (null, '${childId}', '${toyId}')`, err => {
-							if(err) reject(err)
-							resolve()
-						})
+		db.run(`
+			INSERT INTO gifts (childId, toyId)
+			select childId, toyId
+			from children as c, toys as t
+			where c.childName = '${childName}' and t.toyName = '${toyName}';`, err => {
+				if(err) reject(err)
+				resolve()
+			})
 	})
 }
 
