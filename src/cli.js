@@ -4,10 +4,13 @@
 // Load other modules and call appropriate methods
 
 const {checkArgs} = require('./parse-args.js')
+const {performCommand} = require('./performCommand.js')
 
 const [,, ...args] = process.argv,
 						   err = checkArgs(args)
 
 
 if(err) return console.error(`Error: ${err.message}`)
+
+performCommand(args)
 

@@ -118,9 +118,45 @@ const changeDelivered = function(childName) {
 	})
 }
 
+////////////////////////////
+// Removers (and shakers)
+////////////////////////////
+
+const removeGift = function(childName, toyName) {
+	const {Database} = require('sqlite3')
+	const db = new Database('data/lootbag.sqlite')
+
+	return new Promise((resolve, reject) => {
+		db.run(`
+			delete
+			from gifts
+			where childId =
+				(select childId from children where childName = '${childName}')
+			and toyId =
+				(select toyId from toys where toyName = '${toyName}');`, err => {
+				if(err) reject(err)
+				resolve()
+			})
+	})
+}
 
 
 
 
 
-module.exports = {addChild, addToy, addGift, changeDelivered, getChildId, getToyId, getChildrenWithGifts, getGiftsForChild}
+
+module.exports = {
+	addChild,
+	addToy,
+	addGift,
+	changeDelivered,
+	getChildId,
+	getToyId,
+	getChildrenWithGifts,
+	getGiftsForChild,
+	removeGift
+}
+
+
+
+

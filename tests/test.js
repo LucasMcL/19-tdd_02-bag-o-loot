@@ -27,8 +27,12 @@ describe('checkArgs method', function() {
 	})
 })
 
+describe('parseArgs', function() {
+
+})
+
 describe('db-calls', function() {
-	const {addChild, addToy, addGift, changeDelivered, getChildId, getToyId, getChildrenWithGifts, getGiftsForChild} = require('../src/db-calls.js')
+	const {addChild, addToy, addGift, changeDelivered, getChildId, getToyId, getChildrenWithGifts, getGiftsForChild, removeGift} = require('../src/db-calls.js')
 	describe('should add ', function() {
 		it('a toy to the toys table', function() {
 			// Manually tested
@@ -50,7 +54,7 @@ describe('db-calls', function() {
 			})
 		})
 		it('a toys id from its name', function() {
-			return getToyId('Yo-yo').then(id => {
+			return getToyId('yo-yo').then(id => {
 				assert.equal(id, '1')
 			})
 		})
@@ -63,6 +67,83 @@ describe('db-calls', function() {
 			return getGiftsForChild('suzy').then(gifts => {
 				assert.isDefined(gifts[0].toyName)
 			})
+		})
+	})
+	describe('should remove', function() {
+		it('a child-toy pair in the gifts table', function() {
+			// Check manually
+		})
+	})
+})
+
+describe('The on (whatever) functions: ', function() {
+	const {performCommand, onAddCommand, onRemoveCommand, onLsCommand, onDeliveredCommand} = require('../src/performCommand.js')
+	// add kite suzy
+	describe('onAddCommand:', function() {
+		describe('return an error when:', function() {
+			it('only one argument (either child or toy) is specified', function() {
+				return onAddCommand('suzy').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+			it('a child already has one of that toy', function() {
+				return onAddCommand('john', 'yo-yo').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+		})
+		it('should return null when it is a good command', function() {
+			// Check manually
+		})
+	})
+	// remove suzy kite
+	describe('onRemoveCommand:', function() {
+		describe('return an error when:', function() {
+			it('only one argument (either child or toy) is specified', function() {
+				return onRemoveCommand('kite').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+			it(`the child-toy pairing wasn't found`, function() {
+				return onRemoveCommand('john', 'barbie').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+		})
+		it('should return null when it is a good command', function() {
+			// Check manually
+		})
+	})
+	// ls
+	// ls suzy
+	describe('onLsCommand:', function() {
+		describe('return an error when:', function() {
+			it(`there is an argument following ls that isn't a child`, function() {
+				return onLsCommand('Purple').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+		})
+		it('should return null when it is a good command', function() {
+			// Check manually
+		})
+	})
+	// delivered suzy
+	describe('onDeliveredCommand:', function() {
+		describe('return an error when:', function() {
+			it(`there is no argument after delivered`, function() {
+				return onDeliveredCommand(undefined).then(err => {
+					assert.isNotNull(err)
+				})
+			})
+			it(`the argument after delivered isn't a child`, function() {
+				return onDeliveredCommand('Purple').then(err => {
+					assert.isNotNull(err)
+				})
+			})
+		})
+		it('should return null when it is a good command', function() {
+			// Check manuallys
 		})
 	})
 })
